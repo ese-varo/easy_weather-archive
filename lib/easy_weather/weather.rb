@@ -1,4 +1,5 @@
 require 'json'
+require 'httparty'
 
 class Weather
   attr_accessor :data, :forecast
@@ -7,26 +8,39 @@ class Weather
     @data = self.get_general_data(city) 
     @forecast = self.get_forecast_data(5, city)
   end
+  
+  def forecast_data
+    @forecast["list"].each_with_index do |day, index|
+      puts "Day #{index + 1}\n"
+      puts "Temperature: #{day["main"]["temp"]} centigrades\n"
+      puts "Weather: #{day["weather"][0]["description"]}\n"
+    end
+    "Have a nice week!"
+  end
 
   def astronomy_data
+    data_hash =
     { sunrise: @data["sys"]["sunrise"],
       sunset: @data["sys"]["sunset"] 
     }
+    "Sunrice: #{data_hash[:sunrise]} UTC, sunset: #{data_hash[:sunset]} UTC"
   end
   
   def temperature
-    @data["main"]["temp"]
+    "#{@data["main"]["temp"]} centigrades" 
   end
 
   def wind
-    @data["wind"]["speed"]
+    "#{@data["wind"]["speed"]} meters/sec"
   end 
 
   def atmosphere_data
-    { humidity: @data["main"]["humidity"],
-      pressure: @data["main"]["pressure"],
-      visibility: @data["visibility"]
-    }
+    data_hash =
+      { humidity: @data["main"]["humidity"],
+        pressure: @data["main"]["pressure"],
+        visibility: @data["visibility"]
+      }
+    "Humidy: #{data_hash[:humidity]}%, pressure: #{data_hash[:pressure]}hPa, visibility: #{data_hash[:visibility]} meters"
   end
 
   private
@@ -34,7 +48,7 @@ class Weather
   def get_general_data(city)
     response =
     HTTParty.get("https://api.openweathermap.org/data/2.5/weather?q=#{city}
-                 &units=metric&APPID=c6bf473820a2063f3818541ed6847aa8")
+                 &units=metric&APPID=#{ENV["EASY_WEATHER"]}")
 
     JSON.parse(response.body)
   end
@@ -42,8 +56,9 @@ class Weather
   def get_forecast_data(days, city)
     response =
     HTTParty.get("https://api.openweathermap.org/data/2.5/forecast?q=#{city}
-                  &units=metric&cnt=#{days}&appid=c6bf473820a2063f3818541ed6847aa8")
+                  &units=metric&cnt=#{days}&appid=#{ENV["EASY_WEATHER"]}")
   
     JSON.parse(response.body)
   end
 end
+

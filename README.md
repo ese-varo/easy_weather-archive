@@ -22,8 +22,32 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+First, you need to create an acount at https://api.openweathermap.org/
+in order to get an API KEY.
 
+Then, you need to set your API KEY as an environment variable:
+- Write in the console export API_KEY_NAME=VALUE
+
+So, with that set you can start using the gem by creating an instance
+of the Weather class like this:
+weather = Weather.new("Your city")
+
+Then, you can do the following actions:
+
+Get the forecast data:
+weather.forecast_data 
+
+Get the astronomy data:
+weather.astronomy_data
+
+Get the current temperature:
+weather.temperature
+
+Get the current wind data:
+weather.wind
+
+Get the atmosphere data:
+weather.atmosphere_data
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
