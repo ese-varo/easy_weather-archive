@@ -41,24 +41,26 @@ class Weather
         pressure: data["main"]["pressure"],
         visibility: data["visibility"]
       }
-    "Humidy: #{data_hash[:humidity]}%, pressure: #{data_hash[:pressure]}hPa, visibility: #{data_hash[:visibility]} meters"
+    "Humidy: #{data_hash[:humidity]}%, pressure: #{data_hash[:pressure]}hPa, 
+    visibility: #{data_hash[:visibility]} meters"
   end
 
   private
 
   def get_general_data(city)
-    response =
-    HTTParty.get("#{BASE_URL}weather?q=#{city}
-                 &units=metric&APPID=#{ENV["EASY_WEATHER"]}")
-
-    JSON.parse(response.body)
+    url = "#{BASE_URL}weather?q=#{city}
+          &units=metric&APPID=#{ENV["EASY_WEATHER"]}"
+    fetch_data(url)
   end
 
   def get_forecast_data(days, city)
-    response =
-    HTTParty.get("#{BASE_URL}forecast?q=#{city}
-                  &units=metric&cnt=#{days}&appid=#{ENV["EASY_WEATHER"]}")
-  
+    url = "#{BASE_URL}forecast?q=#{city}
+          &units=metric&cnt=#{days}&appid=#{ENV["EASY_WEATHER"]}"
+    fetch_data(url)
+  end
+
+  def fetch_data(url)
+    response = HTTParty.get(url)
     JSON.parse(response.body)
   end
 end
