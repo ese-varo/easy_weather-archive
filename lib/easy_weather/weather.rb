@@ -2,6 +2,7 @@ require 'json'
 require 'httparty'
 
 class Weather
+  BASE_URL = "https://api.openweathermap.org/data/2.5/" 
   attr_accessor :data, :forecast
   
   def initialize(city)
@@ -47,7 +48,7 @@ class Weather
 
   def get_general_data(city)
     response =
-    HTTParty.get("https://api.openweathermap.org/data/2.5/weather?q=#{city}
+    HTTParty.get("#{BASE_URL}weather?q=#{city}
                  &units=metric&APPID=#{ENV["EASY_WEATHER"]}")
 
     JSON.parse(response.body)
@@ -55,7 +56,7 @@ class Weather
 
   def get_forecast_data(days, city)
     response =
-    HTTParty.get("https://api.openweathermap.org/data/2.5/forecast?q=#{city}
+    HTTParty.get("#{BASE_URL}forecast?q=#{city}
                   &units=metric&cnt=#{days}&appid=#{ENV["EASY_WEATHER"]}")
   
     JSON.parse(response.body)
